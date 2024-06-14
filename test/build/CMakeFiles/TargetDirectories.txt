@@ -1,0 +1,3 @@
+/home/sos/code/github/gusuchengzhu/video_recorder_player/test/build/CMakeFiles/rebuild_cache.dir
+/home/sos/code/github/gusuchengzhu/video_recorder_player/test/build/CMakeFiles/edit_cache.dir
+/home/sos/code/github/gusuchengzhu/video_recorder_player/test/build/CMakeFiles/TEST_RGB2YUV.dir

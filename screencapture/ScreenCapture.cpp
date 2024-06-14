@@ -14,22 +14,23 @@ bool XImageScreenCapture::init()
     {
         return false;
     }
-
+    printf("xopen display................\n");
     m_window = RootWindow(m_display, 0);
     if(!m_window)
     {
         return false;
     }
-
+    printf("RootWindow................\n");
     int height = DisplayHeight(m_display, 0);
     int width = DisplayWidth(m_display, 0);
-
-    XImage *windowImage = XGetImage(m_display, m_window,0,0, height, width, AllPlanes, ZPixmap);
+    
+    XImage *windowImage = XGetImage(m_display, m_window,0,0, width,height, AllPlanes, ZPixmap);
     if(!windowImage)
     {
         return false;
     }
-
+    printf("XGetImage................\n");
+    m_shm_segment_info = new XShmSegmentInfo;
     m_image = XShmCreateImage(m_display, DefaultVisual(m_display, 0), windowImage->depth, ZPixmap, NULL, m_shm_segment_info, width, height);
     if(!m_image)
     {
@@ -39,7 +40,6 @@ bool XImageScreenCapture::init()
     XDestroyImage(windowImage);
 
     // int screenSize = height*width*windowImage->bits_per_pixel/8;
-    m_shm_segment_info = new XShmSegmentInfo;
     m_shm_segment_info->shmid = -1;
     m_shm_segment_info->shmid = shmget(IPC_PRIVATE, m_image->bytes_per_line*m_image->height, IPC_CREAT | 0777);
     if(m_shm_segment_info->shmid == -1)

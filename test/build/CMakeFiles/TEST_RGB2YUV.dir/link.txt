@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/TEST_RGB2YUV.dir/test_rgb2yuv.cpp.o CMakeFiles/TEST_RGB2YUV.dir/home/sos/code/github/gusuchengzhu/video_recorder_player/screencapture/ScreenCapture.cpp.o  -o TEST_RGB2YUV   -L/usr/local/ffmpeg/lib  -Wl,-rpath,/usr/local/ffmpeg/lib -lavformat -lswscale -lavutil -lX11 -lXext -ldl -lpthread 
