@@ -38,7 +38,7 @@ bool XImageScreenCapture::init()
     }
 
     XDestroyImage(windowImage);
-
+    printf("shmget\n");
     // int screenSize = height*width*windowImage->bits_per_pixel/8;
     m_shm_segment_info->shmid = -1;
     m_shm_segment_info->shmid = shmget(IPC_PRIVATE, m_image->bytes_per_line*m_image->height, IPC_CREAT | 0777);
@@ -46,15 +46,16 @@ bool XImageScreenCapture::init()
     {
         return false;
     }
-
+    printf("shmat\n");
     m_shm_segment_info->shmaddr = m_image->data = (char*)shmat(m_shm_segment_info->shmid,
                                                                 NULL, 0);
     if(!XShmAttach(m_display, m_shm_segment_info))
     {
         return false;
     }
+    printf("XShmAttach\n");
     
-    return false;
+    return true;
 }
 
 XImageScreenCapture::~XImageScreenCapture()

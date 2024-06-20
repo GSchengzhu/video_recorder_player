@@ -1,8 +1,16 @@
 #include "VideoRecorder.h"
 #include <X11/Xlib.h>
+#include <csignal>
 #include <cstdio>
 #include <string>
 #include <thread>
+
+bool VideoRecorder::m_running = false;
+
+void SignalIntHandle(int sig)
+{
+    VideoRecorder::m_running = false;
+}
 
 VideoRecorder::~VideoRecorder()
 {
@@ -29,8 +37,10 @@ VideoRecorder::~VideoRecorder()
 
 bool VideoRecorder::init(std::string path)
 {
+    signal(SIGINT, SignalIntHandle);
     m_videoEncoder = new VideoEncoder;
-    if(!m_videoEncoder->init())
+    m_videoEncoder->setPath(path);
+    if(!m_videoEncoder->initEncode())
     {
         printf("video encoder init failed\n");
         return false;
@@ -47,27 +57,27 @@ bool VideoRecorder::init(std::string path)
 
 bool VideoRecorder::Start()
 {
-     if(m_recorderPath.empty())
-     {
-        printf("recorder path empty\n");
-        return false;
-     }
+    //  if(m_recorderPath.empty())
+    //  {
+    //     printf("recorder path empty\n");
+    //     return false;
+    //  }
 
-     if(m_needAudio)
-     {
-        m_audioEncoder = new AudioEncoder;
-        if(m_audioEncoder->init())
-        {
-            printf("audio encoder failed\n");
-            return false;
-        }
-     }
+    //  if(m_needAudio)
+    //  {
+    //     m_audioEncoder = new AudioEncoder;
+    //     if(m_audioEncoder->init())
+    //     {
+    //         printf("audio encoder failed\n");
+    //         return false;
+    //     }
+    //  }
 
-     m_recorderFile = fopen(m_recorderPath.c_str(), "wb+");
-     if(!m_recorderFile)
-     {
-        return false;
-     }
+    //  m_recorderFile = fopen(m_recorderPath.c_str(), "wb+");
+    //  if(!m_recorderFile)
+    //  {
+    //     return false;
+    //  }
      
      m_running = true;
      m_workThread = std::thread(&VideoRecorder::startRecorder,this);
@@ -91,8 +101,7 @@ void VideoRecorder::startRecorder()
     while (m_running) 
     {
         XImage* image = m_screenCapture->captureXImage();
-        
-
-
+        m_videoEncoder->encoderXimage(image);    
     }
+    m_videoEncoder->fflushEncoder();
 }

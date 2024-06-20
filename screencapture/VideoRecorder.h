@@ -20,6 +20,9 @@ public:
     bool Stop();
     bool getRecorderStatus();
 
+public:
+    static bool m_running;
+
 private:
     void startRecorder();
 
@@ -27,7 +30,7 @@ private:
     std::string m_recorderPath;
     FILE* m_recorderFile;
     bool m_needAudio = false;
-    bool m_running = false;
+    
 
     VideoEncoder* m_videoEncoder;
     XImageScreenCapture* m_screenCapture;

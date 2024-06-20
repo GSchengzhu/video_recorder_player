@@ -1,8 +1,14 @@
+#ifndef FFMPEG_HELPER_H
+#define FFMPEG_HELPER_H
+extern "C"
+{
 #include "libavcodec/avcodec.h"
 #include "libavcodec/packet.h"
 #include "libavformat/avformat.h"
 #include "libavutil/frame.h"
-typedef struct _OutputStream
+}
+
+typedef struct 
 {
     AVStream *st;
     AVCodecContext *enc;
@@ -12,3 +18,5 @@ typedef struct _OutputStream
     AVPacket *pkt;
 
 } OutputStream;
+
+#endif
